@@ -1,0 +1,328 @@
+/* ========================================
+   LAYOUT RESPONSIVO - TESTADOR API
+   ======================================== */
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--primary-50) 0%,
+    var(--background) 100%
+  );
+  padding: var(--space-1);
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary-700);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Container principal */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: var(--width-7xl);
+  margin: 0 auto;
+}
+
+/* Container dos formulários */
+.forms-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Container de resultados */
+.results-container {
+  min-height: 400px;
+}
+
+/* Card customizado para formulários */
+.form-card {
+  background: var(--background);
+  border: var(--border-width-normal) solid var(--primary-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
+}
+
+.form-card:hover {
+  border-color: var(--primary-300);
+  background: var(--primary-50);
+}
+
+.form-card h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-3);
+  color: var(--primary-700);
+}
+
+/* Card de resultados */
+.results-card {
+  background: var(--background);
+  border: var(--border-width-normal) solid var(--neutral-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+  transition: all var(--transition-normal);
+}
+
+/* Scrollbar customizada */
+.results-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.results-card::-webkit-scrollbar-track {
+  background: var(--primary-50);
+  border-radius: var(--radius-lg);
+}
+
+.results-card::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary-400), var(--primary-500));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--primary-300);
+  transition: all var(--transition-fast);
+}
+
+.results-card::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-500), var(--primary-600));
+  transform: scale(1.1);
+}
+
+.results-card h3 {
+  color: var(--primary-700);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--primary-200);
+}
+
+.results-card pre {
+  background: var(--neutral-50);
+  border: var(--border-width-thin) solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  color: var(--neutral-700);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 70vh;
+  min-height: 300px;
+  overflow-y: auto;
+}
+
+/* Scrollbar para o pre também */
+.results-card pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.results-card pre::-webkit-scrollbar-track {
+  background: var(--primary-50);
+  border-radius: var(--radius-md);
+}
+
+.results-card pre::-webkit-scrollbar-thumb {
+  background: var(--primary-400);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-300);
+}
+
+.results-card pre::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-500);
+}
+
+/* Estilos para labels */
+.form-card label {
+  font-weight: var(--font-weight-medium);
+  color: var(--primary-700);
+  margin-bottom: var(--space-1);
+  display: block;
+  font-size: var(--font-size-sm);
+}
+
+/* Inputs compactos */
+.form-card .input {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-2);
+  transition: all var(--transition-normal);
+}
+
+.form-card .input:focus {
+  transform: none;
+}
+
+/* Botões compactos */
+.form-card .btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+/* Botões em linha nos formulários */
+.button-group {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Estado vazio dos resultados */
+.results-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--on-surface-variant);
+  min-height: 200px;
+}
+
+.results-empty::before {
+  content: "📋";
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+
+/* ========================================
+   LAYOUT DESKTOP - 540px+
+   ======================================== */
+
+@media (min-width: 540px) {
+  body {
+    padding: var(--space-2);
+  }
+
+  h1 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .main-container {
+    flex-direction: row;
+    gap: var(--space-6);
+    align-items: flex-start;
+  }
+
+  .forms-container {
+    flex: 0 0 35%;
+    min-width: 280px;
+  }
+
+  .results-container {
+    flex: 1;
+    min-height: 500px;
+  }
+
+  .form-card {
+    padding: var(--space-4);
+  }
+
+  .form-card h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .form-card .input {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-3);
+  }
+
+  .form-card .btn {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--font-size-base);
+  }
+
+  .button-group {
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .results-card {
+    padding: var(--space-6);
+    height: calc(100vh - 100px);
+    position: sticky;
+    top: var(--space-4);
+  }
+
+  .button-group {
+    flex-direction: row;
+  }
+
+  .button-group .btn {
+    flex: 1;
+  }
+}
+
+/* ========================================
+   MELHORIAS VISUAIS
+   ======================================== */
+
+/* Animação suave para mudanças de conteúdo */
+.results-card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Indicador de loading */
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--primary-600);
+}
+
+.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--primary-200);
+  border-top: 2px solid var(--primary-600);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Melhorias nos inputs */
+.form-card .input {
+  transition: all var(--transition-normal);
+}
+
+/* Responsividade para botões em mobile */
+@media (max-width: 539px) {
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group .btn {
+    width: 100%;
+  }
+}

@@ -1,86 +1,170 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teste da API</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teste da API</title>
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <h1>🧪 Testador da API</h1>
+
+  <div class="main-container">
+    <!-- Container dos Formulários -->
+    <div class="forms-container">
+      <!-- Formulário de Criação -->
+      <form class="form-card">
+        <h2>✨ Criar Usuário</h2>
+        <div>
+          <div>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required class="input" placeholder="Digite o nome completo" />
+          </div>
+          <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required class="input" placeholder="exemplo@email.com" />
+          </div>
+          <div>
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" name="idade" required class="input" placeholder="18" min="1" max="120" />
+          </div>
+          <button type="button" onclick="criarUsuario()" class="btn btn-primary" style="margin-top: var(--space-3);">
+            Criar Usuário
+          </button>
+        </div>
+      </form>
+
+      <!-- Formulário de Busca -->
+      <form class="form-card">
+        <h2>🔍 Buscar & Listar</h2>
+        <div>
+          <div>
+            <label for="buscar-id">ID do Usuário:</label>
+            <input type="number" id="buscar-id" name="buscar-id" class="input" placeholder="Digite o ID" min="1" />
+          </div>
+          <div class="button-group">
+            <button type="button" onclick="listarUsuarios()" class="btn btn-secondary">
+              📋 Listar Todos
+            </button>
+            <button type="button" onclick="buscarUsuario()" class="btn btn-primary">
+              🔎 Buscar por ID
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Container de Resultados -->
+    <div class="results-container">
+      <div id="resultado" class="results-card">
+        <div class="results-empty">
+          <p>Execute uma ação para ver os resultados aqui</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "http://localhost:3000";
+
+    // Função para mostrar loading
+    function mostrarLoading(titulo) {
+      document.getElementById("resultado").innerHTML = `
+          <h3>${titulo}</h3>
+          <div class="loading">Carregando dados...</div>
+        `;
+    }
+
+    // Função melhorada para mostrar resultados
+    function mostrarResultado(titulo, data, isError = false) {
+      const resultado = document.getElementById("resultado");
+      const errorClass = isError ? 'style="border-color: var(--error-500);"' : '';
+      const iconeTitulo = isError ? '❌' : '✅';
+
+      resultado.innerHTML = `
+          <div ${errorClass}>
+            <h3>${iconeTitulo} ${titulo}</h3>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          </div>
+        `;
+    }
+
+    async function listarUsuarios() {
+      mostrarLoading("Listando Usuários");
+      try {
+        const response = await fetch(`${API_URL}/usuarios`);
+        const data = await response.json();
+        mostrarResultado("Lista de Usuários", data);
+      } catch (error) {
+        mostrarResultado("Erro ao Listar", { erro: error.message }, true);
       }
-      button {
-        margin: 5px;
-        padding: 10px;
+    }
+
+    async function buscarUsuario() {
+      const id = document.getElementById('buscar-id').value;
+      if (!id) {
+        mostrarResultado("Erro de Validação", { erro: "Por favor, digite um ID válido" }, true);
+        return;
       }
-      #resultado {
-        background: #f5f5f5;
-        padding: 10px;
-        margin-top: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>🧪 Testador da API</h1>
 
-    <button onclick="listarUsuarios()">Listar Usuários</button>
-    <button onclick="buscarUsuario()">Buscar Usuário ID 1</button>
-    <button onclick="criarUsuario()">Criar Usuário</button>
-
-    <div id="resultado"></div>
-
-    <script>
-      const API_URL = "http://localhost:3000";
-
-      async function listarUsuarios() {
-        try {
-          const response = await fetch(`${API_URL}/usuarios`);
-          const data = await response.json();
-          mostrarResultado("Listar Usuários", data);
-        } catch (error) {
-          mostrarResultado("Erro", { erro: error.message });
+      mostrarLoading("Buscando Usuário");
+      try {
+        const response = await fetch(`${API_URL}/usuarios/${id}`);
+        if (!response.ok) {
+          throw new Error(`Usuário com ID ${id} não encontrado`);
         }
+        const data = await response.json();
+        mostrarResultado(`Usuário ID: ${id}`, data);
+      } catch (error) {
+        mostrarResultado("Erro na Busca", { erro: error.message }, true);
+      }
+    }
+
+    async function criarUsuario() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const idade = document.getElementById('idade').value;
+
+      if (!nome || !email || !idade) {
+        mostrarResultado("Erro de Validação", { erro: "Todos os campos são obrigatórios" }, true);
+        return;
       }
 
-      async function buscarUsuario() {
-        try {
-          const response = await fetch(`${API_URL}/usuarios/1`);
-          const data = await response.json();
-          mostrarResultado("Buscar Usuário", data);
-        } catch (error) {
-          mostrarResultado("Erro", { erro: error.message });
+      mostrarLoading("Criando Usuário");
+      try {
+        const novoUsuario = {
+          nome: nome.trim(),
+          email: email.trim(),
+          idade: parseInt(idade)
+        };
+
+        const response = await fetch(`${API_URL}/usuarios`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(novoUsuario),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          mostrarResultado("Usuário Criado", data);
+          // Limpar formulário após sucesso
+          document.getElementById('nome').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('idade').value = '';
+        } else {
+          throw new Error(data.erro || 'Erro ao criar usuário');
         }
+      } catch (error) {
+        mostrarResultado("Erro na Criação", { erro: error.message }, true);
       }
+    }
+  </script>
+</body>
 
-      async function criarUsuario() {
-        try {
-          const novoUsuario = {
-            nome: "Teste API",
-            email: `teste${Date.now()}@email.com`,
-            idade: 25,
-          };
-
-          const response = await fetch(`${API_URL}/usuarios`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(novoUsuario),
-          });
-
-          const data = await response.json();
-          mostrarResultado("Criar Usuário", data);
-        } catch (error) {
-          mostrarResultado("Erro", { erro: error.message });
-        }
-      }
-
-      function mostrarResultado(titulo, data) {
-        document.getElementById("resultado").innerHTML = `
-                <h3>${titulo}</h3>
-                <pre>${JSON.stringify(data, null, 2)}</pre>
-            `;
-      }
-    </script>
-  </body>
 </html>
